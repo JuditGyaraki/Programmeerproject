@@ -1,0 +1,78 @@
+﻿<Page Background="White" x:Class="BikesForRentWPF.Page_Beschikbare_Fietsen"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BikesForRentWPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Page_Beschikbare_Fietsen">
+    <Page.Resources>
+        <local:FilterConverter x:Key="FilterConverter"/>
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Label Content="Beschikbare fietsen" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="220" Height="25" Margin="20, 20, 20, 20"/>
+            <StackPanel Orientation="Horizontal" Margin="20,0,20,10">
+
+                <RadioButton Content="Alles"
+                 GroupName="BikeFilter"
+                 Margin="0,0,15,0"
+                 IsChecked="{Binding SelectedFilter, Converter={StaticResource FilterConverter}, ConverterParameter=Alles}" />
+
+                <RadioButton Content="Dames"
+                 GroupName="BikeFilter"
+                 Margin="0,0,15,0"
+                 IsChecked="{Binding SelectedFilter, Converter={StaticResource FilterConverter}, ConverterParameter=Dame}" />
+
+                <RadioButton Content="Heren"
+                 GroupName="BikeFilter"
+                 Margin="0,0,15,0"
+                 IsChecked="{Binding SelectedFilter, Converter={StaticResource FilterConverter}, ConverterParameter=Heren}" />
+
+                <RadioButton Content="Kinderen"
+                 GroupName="BikeFilter"
+                 Margin="0,0,15,0"
+                 IsChecked="{Binding SelectedFilter, Converter={StaticResource FilterConverter}, ConverterParameter=Kinderen}" />
+
+            </StackPanel>
+            <ListView ItemsSource="{Binding AvailableBikesView}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" PreviewMouseWheel="ListView_PreviewMouseWheel">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" Margin="10" Padding="10" Width="220">
+                            <StackPanel Width="200">
+                                <CheckBox Content="Selecteer"
+                                    IsChecked="{Binding IsSelected}" 
+                                    HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                <Image Height="120" Source="{Binding ImagePath}" />
+
+                                <TextBlock Text="{Binding Name}" 
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5"/>
+
+                                
+                                <TextBlock Text="{Binding Priceperday, StringFormat=Prijs per dag € : {0}}"/>
+
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btn_Terug" Content="Terug" Click="btn_Terug_Click"  Width="120" Height="21" Margin="20, 40, 20, 20" Grid.Column="0"/>
+                <Button x:Name="btn_Verder" Content="Verder" Click="btn_Verder_Click"  Width="120" Height="21" Margin="20, 40, 20, 20" Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
