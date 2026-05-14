@@ -27,7 +27,6 @@ namespace BikesForRentWPF
         public Login()
         {
             InitializeComponent();
-            //frame.Navigate(new Login());
         }
         private bool LoginUser(string email, string password)
         {

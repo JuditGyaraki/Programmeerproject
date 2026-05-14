@@ -68,6 +68,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- LINKS -->
@@ -78,8 +79,11 @@
             HorizontalAlignment="Left"
             Click="btn_Annuleren_Click"/>
 
+            <TextBlock Grid.Column ="1" Text="{Binding TotalPrice,
+          StringFormat=Totaal € : {0}}"/>
+
             <!-- RECHTS -->
-            <Button Grid.Column="1"
+            <Button Grid.Column="2"
             Content="Reserveren"
             Width="120"
             Height="35"

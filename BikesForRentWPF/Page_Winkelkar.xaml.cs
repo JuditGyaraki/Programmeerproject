@@ -46,37 +46,48 @@ namespace BikesForRentWPF
             var vm = (Winkelkar_ViewModel)DataContext;
             //MessageBox.Show(vm.SelectedBikes.Count.ToString()); // tijdelijk
 
-            var TeBetalen = vm.SelectedBikes.Sum(b => (b.Priceperday ?? 0) * b.Days);
+            var teBetalen = vm.SelectedBikes.Sum(b => (b.Priceperday ?? 0) * b.Days);
 
             var hotelUserId = db.Hotelusers
                 .Where(hu => hu.UserId == Session.UserId)
                 .Select(hu => hu.Id)
                 .FirstOrDefault();
 
+            Reservation reservation = new Reservation()
+            {
+                HoteluserId = hotelUserId,
+                Totalprice = teBetalen,
+                Startdate = DateTime.Now.ToString("yyyy-MM-dd"),
+                Enddate = DateTime.Now.AddDays(vm.SelectedBikes.First().Days)
+                             .ToString("yyyy-MM-dd"),
+                Status = "Booked",
+                Days = vm.SelectedBikes.First().Days
+            };
+
+            db.Reservations.Add(reservation);
+
+            // eerst saven zodat ReservationId gegenereerd wordt
+            db.SaveChanges();
+
+            // fietsen koppelen
             foreach (var bike in vm.SelectedBikes)
             {
-                Reservation reservation = new Reservation()
+                ReservationBike reservationBike = new ReservationBike()
                 {
-                    HoteluserId = hotelUserId,
-                    BikeId = bike.Id,
-                    Totalprice = TeBetalen,
-                    Startdate = DateTime.Now.ToString("yyyy-MM-dd"),
-                    Enddate = DateTime.Now.AddDays(bike.Days).ToString("yyyy-MM-dd"),
-                    Status = "Booked",
-                    Days = bike.Days                
+                    ReservationId = reservation.Id,
+                    BikeId = bike.Id
                 };
-                db.Reservations.Add(reservation);
-                MessageBox.Show(
-                    $"HotelUserId: {hotelUserId}\n" +
-                    $"BikeId: {bike.Id}\n" +
-                    $"UserId: {Session.UserId}"
-                );
-            }
-            db.SaveChanges();
-            MessageBox.Show("Reservatie opgeslagen!");
 
+                db.ReservationBikes.Add(reservationBike);
+            }
+
+            db.SaveChanges();
+
+            MessageBox.Show("Reservatie opgeslagen!");
         }
 
-
     }
+
+
+    
 }
